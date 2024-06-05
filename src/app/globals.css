@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+.bg-gradient-to-br {
+  background: linear-gradient(to bottom right, #a0a0a0, #e95a26);
+}
+
+.text-gradient {
+  background: linear-gradient(to bottom right, #a0a0a0, #e95a26);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.btn-gradient {
+  background: linear-gradient(to bottom right, #a0a0a0, #e95a26);
+  color: white;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(to bottom right, #e0e0e0, #ff4500); 
+}
