@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import MyLoginButton from "../Log-In-components/MyLoginButton";
 
 export default function SignUp() {
   const [loginName, setLoginName] = useState("");
@@ -45,12 +46,13 @@ export default function SignUp() {
               value={password}
             />
           </div>
-          <button
-            type="submit"
-            className="btn-gradient text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Login
-          </button>
+          <MyLoginButton
+            loginName={loginName}
+            password={password}
+            setLoginName={setLoginName}
+            setPassword={setPassword}
+            apiUrl={apiUrl}
+          />
         </form>
       </div>
     </div>
