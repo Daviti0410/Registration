@@ -10,40 +10,37 @@ export default function MyLoginButton({
   const router = useRouter();
 
   async function handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission behavior
+    event.preventDefault();
 
     if (!loginName || !password) {
       alert("All fields are required");
       return;
     }
 
-    const url = new URL(`${apiUrl}/getUser`);
-    url.searchParams.append("loginName", loginName);
-    url.searchParams.append("password", password);
+    const response = await fetch(`${apiUrl}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ loginName, password }),
+    });
 
-    try {
-      const response = await fetch(url.toString(), {
-        method: "GET", // Using GET method
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const data = await response.json(); // Await the JSON response
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      setLoginName("");
-      setPassword("");
-      alert("Login successful!");
-      router.push("/"); // Navigate to the main page
-    } catch (error) {
-      console.error("Login failed:", error);
+    if (!response.ok) {
+      const error = await response.json();
       alert(`Login failed: ${error.message}`);
+      return;
     }
+
+    const data = await response.json();
+
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    setLoginName("");
+    setPassword("");
+    alert("Login successful!");
+    router.push("/");
   }
 
   return (
