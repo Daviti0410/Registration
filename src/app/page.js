@@ -1,8 +1,29 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [apiUrl, setApiUrl] = useState("http://localhost:3000/api");
+
+  useEffect(() => {
+    async function fetchProtectedData() {
+      const response = await fetch(`${apiUrl}/protectToken`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        router.push("/Log-In");
+        return;
+      }
+    }
+
+    fetchProtectedData();
+  }, []);
   const router = useRouter();
 
   const handleSignUp = (event) => {
