@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { registrationSchema } from "../libs/validation";
 
 export default function MyButton({
   loginName,
@@ -16,15 +17,12 @@ export default function MyButton({
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
-    if (!loginName || !email || !password || !confirmPassword) {
-      alert("All fields are required");
-      return;
-    }
+    await registrationSchema.validate({
+      loginName,
+      email,
+      password,
+      confirmPassword,
+    });
 
     try {
       const response = await fetch(`${apiUrl}/registerUser`, {

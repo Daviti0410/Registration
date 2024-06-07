@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { loginSchema } from "../libs/validation";
 
 export default function MyLoginButton({
   loginName,
@@ -12,11 +13,10 @@ export default function MyLoginButton({
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!loginName || !password) {
-      alert("All fields are required");
-      return;
-    }
-
+    await loginSchema.validate({
+      loginName,
+      password,
+    });
     const response = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {

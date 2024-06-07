@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import pool from "../../libs/connection";
 import bcrypt from "bcrypt";
+import { registrationSchema } from "@/app/libs/validation";
 
 const SALT_ROUNDS = 10;
 
@@ -8,12 +9,13 @@ export async function POST(req) {
   try {
     const { loginName, email, password } = await req.json();
 
-    if (!loginName || !email || !password) {
-      return NextResponse.json(
-        { error: "This fields are required" },
-        { status: 400 }
-      );
-    }
+    await registrationSchema.validate({
+      loginName,
+      email,
+      password,
+      confirmPassword,
+    });
+
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
     const db = await pool.getConnection();

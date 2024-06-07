@@ -3,6 +3,7 @@ import pool from "../../libs/connection";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 import bcrypt from "bcrypt";
+import { loginSchema } from "@/app/libs/validation";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -11,6 +12,11 @@ export const revalidate = 0;
 export async function POST(req) {
   try {
     const { loginName, password } = await req.json();
+
+    await loginSchema.validate({
+      loginName,
+      password,
+    });
 
     const db = await pool.getConnection();
     const query = "SELECT * FROM users WHERE loginName = ?";
