@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import MyButton from "../Sign-Up-components/MyButton";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [loginName, setLoginName] = useState("");
@@ -10,6 +11,13 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [apiUrl, setApiUrl] = useState("http://localhost:3000/api");
+
+  const router = useRouter();
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    router.push("/Log-In");
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-200 to-orange-500">
@@ -80,17 +88,26 @@ export default function SignUp() {
               value={confirmPassword}
             />
           </div>
-          <MyButton
-            loginName={loginName}
-            email={email}
-            password={password}
-            confirmPassword={confirmPassword}
-            setLoginName={setLoginName}
-            setEmail={setEmail}
-            setPassword={setPassword}
-            setConfirmPassword={setConfirmPassword}
-            apiUrl={apiUrl}
-          />
+          <div className="flex items-center justify-between">
+            <MyButton
+              loginName={loginName}
+              email={email}
+              password={password}
+              confirmPassword={confirmPassword}
+              setLoginName={setLoginName}
+              setEmail={setEmail}
+              setPassword={setPassword}
+              setConfirmPassword={setConfirmPassword}
+              apiUrl={apiUrl}
+            />
+            <button
+              type="submit"
+              className="btn-gradient text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={handleSubmit}
+            >
+              Log in
+            </button>
+          </div>
         </form>
       </div>
     </div>

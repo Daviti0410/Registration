@@ -2,13 +2,19 @@
 
 import { useState } from "react";
 import MyLoginButton from "../Log-In-components/MyLoginButton";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
   const [loginName, setLoginName] = useState("");
   const [password, setPassword] = useState("");
 
   const [apiUrl, setApiUrl] = useState("http://localhost:3000/api");
+  const router = useRouter();
 
+  async function handleSubmit(event) {
+    event.preventDefault();
+    router.push("/Sign-Up");
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-200 to-orange-500">
       <div className="flex flex-col items-center justify-center w-full max-w-md bg-white p-8 rounded-lg shadow-md">
@@ -46,13 +52,22 @@ export default function SignUp() {
               value={password}
             />
           </div>
-          <MyLoginButton
-            loginName={loginName}
-            password={password}
-            setLoginName={setLoginName}
-            setPassword={setPassword}
-            apiUrl={apiUrl}
-          />
+          <div className="flex items-center justify-between">
+            <MyLoginButton
+              loginName={loginName}
+              password={password}
+              setLoginName={setLoginName}
+              setPassword={setPassword}
+              apiUrl={apiUrl}
+            />
+            <button
+              type="submit"
+              className="btn-gradient text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              onClick={handleSubmit}
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
       </div>
     </div>
