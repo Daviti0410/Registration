@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "../../libs/connection";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
+import bcrypt from "bcrypt";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -12,8 +13,8 @@ export async function POST(req) {
     const { loginName, password } = await req.json();
 
     const db = await pool.getConnection();
-    const query = "SELECT * FROM users WHERE loginName = ? AND password = ?";
-    const [rows] = await db.execute(query, [loginName, password]);
+    const query = "SELECT * FROM users WHERE loginName = ?";
+    const [rows] = await db.execute(query, [loginName]);
     db.release();
 
     if (rows.length === 0) {
@@ -24,6 +25,16 @@ export async function POST(req) {
     }
 
     const user = rows[0];
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      return NextResponse.json(
+        { error: "Invalid login or Password" },
+        { status: 401 }
+      );
+    }
+
     const token = jwt.sign(
       { loginName: user.loginName, role: user.role },
       JWT_SECRET,
